@@ -1,0 +1,26 @@
+FROM selenium/standalone-firefox:latest
+
+RUN sudo apt-get update \
+    && sudo apt-get install -y --no-install-recommends \
+		curl \
+        libc6 \
+        libcurl3 \
+        libgcc1 \
+        libgssapi-krb5-2 \
+        liblttng-ust0 \
+        libssl1.0.0 \
+        libstdc++6 \
+        libunwind8 \
+        libuuid1 \
+        zlib1g \
+		&& sudo rm -rf /var/lib/apt/lists/*
+
+# Install .NET Core SDK
+ENV DOTNET_SDK_VERSION 2.0.0-preview1-005977
+ENV DOTNET_SDK_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-dev-linux-x64.$DOTNET_SDK_VERSION.tar.gz
+
+RUN sudo curl -SL $DOTNET_SDK_DOWNLOAD_URL --output dotnet.tar.gz \
+    && sudo mkdir -p /usr/share/dotnet \
+    && sudo tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
+    && sudo rm dotnet.tar.gz \
+    && sudo ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
